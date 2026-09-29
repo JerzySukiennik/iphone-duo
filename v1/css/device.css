@@ -1,0 +1,65 @@
+/* ============ hardware: two titanium halves, one hinge ============ */
+#world, #device { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+#device { will-change: transform; }
+
+.half { position: absolute; top: calc(var(--bh) / -2); width: var(--bw); height: var(--bh); transform-style: preserve-3d; }
+.half.left { left: calc(var(--bw) * -1); }
+.half.right { left: 0; }
+
+.layer { position: absolute; inset: 0; backface-visibility: visible; }
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; background: #000; }
+.slot { position: absolute; overflow: hidden; background: #000; }
+.glass { position: absolute; inset: 3px; border-radius: inherit; pointer-events: none; z-index: 40;
+  background: linear-gradient(118deg, rgba(255,255,255,.055) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 68%, rgba(255,255,255,.035) 100%); }
+
+/* the seamless inner display, drawn in the device plane while flat */
+.flatcanvas { position: absolute; overflow: hidden; background: #000; }
+.flatcanvas .flat-inner { position: absolute; inset: 0; overflow: hidden; }
+.crease { position: absolute; left: 50%; top: 0; bottom: 0; width: 18px; margin-left: -9px; pointer-events: none; z-index: 60; opacity: .5;
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.02) 35%, rgba(0,0,0,.075) 50%, rgba(0,0,0,.02) 65%, rgba(0,0,0,0) 100%); }
+.crease::after { display: none; }
+
+/* right half back: ceramic glass + dual Fusion camera plateau */
+.face.back { display: block; }
+.plateau { position: absolute; left: 26px; top: 26px; width: 206px; height: 104px; border-radius: 52px;
+  background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,.04) 60%, rgba(0,0,0,.14));
+  box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.35), 0 0 0 1px rgba(0,0,0,.25), 0 10px 22px rgba(0,0,0,.35); }
+.lens { position: absolute; top: 12px; width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #05070c 0 20%, #1a2233 28%, #06080c 44%, #3a3f4b 50%, #101218 56%, #808591 59%, #22252c 64%, #9a9fab 68%);
+  box-shadow: 0 0 0 5px #8b8f99, 0 0 0 7.500px #2b2e35, 0 4px 10px rgba(0,0,0,.6), inset 0 0 14px rgba(0,0,0,.9); }
+.lens::after { content: ""; position: absolute; left: 24%; top: 20%; width: 22%; height: 22%; border-radius: 50%; background: radial-gradient(circle, rgba(150,180,255,.8), transparent 70%); }
+.lens.a { left: 12px; } .lens.b { left: 102px; }
+.plateau .flash { position: absolute; right: 12px; top: 14px; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle, #fff6d0, #e9d68a 60%, #7a6a2c); box-shadow: 0 0 0 2.500px #8b8f99; }
+.plateau .mic { position: absolute; right: 16px; bottom: 16px; width: 7px; height: 7px; border-radius: 50%; background: #0c0d10; box-shadow: 0 0 0 2px #8b8f99; }
+.logo { position: absolute; left: 50%; top: 50%; width: 66px; height: 66px; margin: -33px 0 0 -33px; }
+.logo svg { width: 100%; height: 100%; fill: var(--logo, #999); filter: drop-shadow(0 1px 0 rgba(255,255,255,.3)); }
+.wordmark { position: absolute; bottom: 44px; left: 0; right: 0; text-align: center; font-size: 11px; letter-spacing: .5em; text-indent: .5em; color: var(--wm, #888); font-weight: 600; text-transform: uppercase; }
+
+/* physical buttons: slivers on the frame */
+.hw { position: absolute; background: linear-gradient(90deg, var(--ti, #666), #d3d6de 50%, var(--ti, #666)); border-radius: 2px; cursor: pointer; z-index: 5; transition: transform .08s; box-shadow: 0 0 2px rgba(0,0,0,.6); transform: translateZ(16px); }
+.hw::after { content: ""; position: absolute; inset: -8px; }
+.hw.side { right: -4px; top: 196px; width: 4px; height: 92px; }
+.hw.camctl { right: -3.500px; top: 440px; width: 3.500px; height: 58px; background: linear-gradient(90deg, #14161c, #3a3f4c 50%, #14161c); }
+.hw.vup { top: -4px; left: 118px; width: 52px; height: 4px; background: linear-gradient(180deg, var(--ti, #666), #d3d6de 50%, var(--ti, #666)); }
+.hw.vdn { top: -4px; left: 186px; width: 52px; height: 4px; background: linear-gradient(180deg, var(--ti, #666), #d3d6de 50%, var(--ti, #666)); }
+.hw.action { left: -4px; top: 130px; width: 4px; height: 36px; background: linear-gradient(90deg, #d3d6de, var(--ti, #666)); }
+.hw.pressed.side, .hw.pressed.camctl { transform: translate3d(-2px, 0, 16px); }
+.hw.pressed.vup, .hw.pressed.vdn { transform: translate3d(0, 2px, 16px); }
+.hw.pressed.action { transform: translate3d(2px, 0, 16px); }
+.grip { position: absolute; left: -32px; top: 90px; bottom: 90px; width: 32px; cursor: grab; z-index: 8; transform: translateZ(17px); }
+.grip:active { cursor: grabbing; }
+
+/* hinge details */
+.spine { position: absolute; left: calc(var(--t) * -1); top: calc(var(--bh) / -2 + 1px); width: calc(var(--t) * 2); height: calc(var(--bh) - 2px); opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, var(--sp1, #222), var(--sp2, #aaa) 50%, var(--sp1, #222)); border-radius: 6px;
+  transform: translateZ(calc(var(--t) / 2)) rotateY(90deg); backface-visibility: visible; }
+.knuckle { position: absolute; left: -5px; width: 10px; height: var(--t); border-radius: 4px; pointer-events: none;
+  background: linear-gradient(90deg, var(--sp1, #222), var(--sp2, #aaa) 50%, var(--sp1, #222)); }
+.knuckle.top { top: calc(var(--bh) / -2 - 3px); transform: translateZ(0) rotateX(90deg); transform-origin: 50% 0; }
+.knuckle.bot { top: calc(var(--bh) / 2 + 3px); transform: translateZ(0) rotateX(-90deg); transform-origin: 50% 100%; }
+
+.shadow { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; pointer-events: none; }
+.shadow i { position: absolute; left: calc(var(--bw) * -1 - 30px); top: calc(var(--bh) / 2 - 8px); width: calc(var(--bw) * 2 + 60px); height: 90px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0,0,0,.6), transparent); filter: blur(14px); transform: translateZ(-60px) scaleY(.5); }
+
+.face.back.torch .plateau .flash { background: #fff; box-shadow: 0 0 0 2.5px #8b8f99, 0 0 30px 14px rgba(255,244,210,.95), 0 0 90px 50px rgba(255,236,180,.55); }

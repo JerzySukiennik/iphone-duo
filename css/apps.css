@@ -1,0 +1,18 @@
+/* ================= shared app furniture ================= */
+.app { color: var(--label); font-size: 15px; }
+.app button { color: inherit; }
+.app-pad { padding-right: var(--safe-r, 0px); }
+
+/* ---------- Calculator ---------- */
+.calc { background: #000; color: #fff; display: flex; flex-direction: column; padding: 26px calc(16px + var(--safe-r)) calc(16px + var(--safe-b)) 16px; height: 100%; gap: 8px; }
+.c-disp { text-align: right; font-weight: 200; letter-spacing: -.02em; padding: 0 8px; line-height: 1; height: 92px; display: flex; align-items: flex-end; justify-content: flex-end; white-space: nowrap; flex: none; }
+.c-body { flex: 1; display: flex; gap: 14px; min-height: 0; justify-content: center; align-items: stretch; }
+.c-sci { display: none; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(5, 1fr); gap: 9px; flex: 1.35; min-width: 0; }
+.c-pad { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(5, 1fr); gap: 10px; flex: 1; min-width: 0; max-height: 100%; }
+.ck { border-radius: 999px; font-size: 28px; font-weight: 400; display: grid; place-items: center; background: #333; color: #fff; transition: filter .12s, background .12s; min-height: 0; min-width: 0; padding: 0; }
+.ck:active { filter: brightness(1.7); }
+.ck.fn { background: #a5a5a5; color: #000; font-size: 25px; } .ck.op { background: #ff9f0a; font-size: 36px; } .ck.op.active { background: #fff; color: #ff9f0a; } .ck.wide { grid-column: span 2; justify-content: start; padding-left: 9%; }
+.ck.csf { background: #212121; font-size: 16px; } .ck.csf:active { background: #4a4a4a; }
+/* compact: round keys sized by the narrower axis so they never stretch into ovals */
+@container win (max-width: 639px) { .c-pad { width: 100%; } .c-body { align-items: flex-end; } .c-pad { aspect-ratio: 4 / 5; flex: none; } }
+@container win (min-width: 640px) { .c-sci { display: grid; } .c-pad { max-width: 400px; } .ck { font-size: 24px; } .ck.op { font-size: 32px; } }

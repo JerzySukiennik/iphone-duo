@@ -1,0 +1,61 @@
+/* ================= Camera ================= */
+.cam { display: flex; background: #000; color: #fff; overflow: hidden; height: 100%; }
+.cam-vf { position: relative; flex: 1; min-width: 0; min-height: 0; overflow: hidden; background: #0b0b0d; --safe-r: 0px; }
+.cam-view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.cam-depth { position: absolute; inset: 0; opacity: 0; transition: opacity .4s; pointer-events: none; backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px);
+  -webkit-mask-image: radial-gradient(ellipse 30% 44% at 50% 52%, transparent 62%, #000 100%); mask-image: radial-gradient(ellipse 30% 44% at 50% 52%, transparent 62%, #000 100%); }
+.cam-depth.on { opacity: 1; }
+.cam-grid { position: absolute; inset: 0; display: none; pointer-events: none; } .cam-grid.on { display: block; }
+.cam-grid i { position: absolute; background: rgba(255,255,255,.35); } .cam-grid i:nth-child(1), .cam-grid i:nth-child(2) { top: 0; bottom: 0; width: 1px; } .cam-grid i:nth-child(3), .cam-grid i:nth-child(4) { left: 0; right: 0; height: 1px; }
+.cam-grid i:nth-child(1) { left: 33.33%; } .cam-grid i:nth-child(2) { left: 66.66%; } .cam-grid i:nth-child(3) { top: 33.33%; } .cam-grid i:nth-child(4) { top: 66.66%; }
+.cam-top { position: absolute; top: 0; left: 0; right: 0; padding: 14px 12px 0; display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; z-index: 6; pointer-events: none; }
+.cam-tb { pointer-events: auto; min-width: 38px; height: 38px; padding: 0 9px; border-radius: 19px; display: flex; align-items: center; justify-content: center; gap: 3px; font-size: 12px; font-weight: 700; background: rgba(30,30,32,.55); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: transform .12s, color .2s, background .2s; }
+.cam-tb:active { transform: scale(.9); } .cam-tb.on { color: #ffd60a; } .cam-tb.dim { opacity: .55; } .cam-tb .svgi { font-size: 19px; }
+.cam-badge { position: absolute; left: 50%; top: 62px; transform: translateX(-50%) translateY(-6px); padding: 6px 13px; border-radius: 16px; background: rgba(0,0,0,.55); backdrop-filter: blur(14px); font-size: 13px; font-weight: 600; opacity: 0; transition: opacity .3s, transform .3s; pointer-events: none; z-index: 6; white-space: nowrap; }
+.cam-badge.on { opacity: 1; transform: translateX(-50%); }
+.cam-demo { position: absolute; left: 12px; bottom: 12px; padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: rgba(0,0,0,.5); backdrop-filter: blur(10px); z-index: 4; opacity: .85; }
+.cam-rec { position: absolute; left: 14px; top: 62px; display: none; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 14px; background: #ff3b30; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; z-index: 6; }
+.cam-rec.on { display: flex; } .cam-rec i { width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: camblink 1s steps(2) infinite; } @keyframes camblink { 50% { opacity: .2; } }
+.cam-zoom { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 6px; padding: 4px; border-radius: 26px; background: rgba(0,0,0,.35); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 6; }
+.cam-z { width: 36px; height: 36px; border-radius: 50%; font-size: 12.5px; font-weight: 700; display: grid; place-items: center; transition: background .2s, color .2s, transform .15s; } .cam-z.on { background: rgba(0,0,0,.55); color: #ffd60a; transform: scale(1.08); font-size: 13px; }
+.cam-styles { position: absolute; left: 0; right: 0; bottom: 64px; display: flex; gap: 10px; padding: 8px 14px; overflow-x: auto; scrollbar-width: none; z-index: 6; transform: translateY(20px); opacity: 0; pointer-events: none; transition: transform .35s cubic-bezier(.2,.9,.25,1), opacity .3s; background: linear-gradient(0deg, rgba(0,0,0,.4), transparent); }
+.cam-styles.on { transform: none; opacity: 1; pointer-events: auto; }
+.cam-st { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; opacity: .75; } .cam-st.on { opacity: 1; color: #ffd60a; }
+.cam-st i { width: 50px; height: 50px; border-radius: 10px; background: linear-gradient(135deg, #f7b267, #7bb6f7 55%, #6fcf97); box-shadow: 0 0 0 1.5px rgba(255,255,255,.3); } .cam-st.on i { box-shadow: 0 0 0 2px #ffd60a; }
+.cam-focus { position: absolute; width: 76px; height: 76px; margin: -38px 0 0 -38px; pointer-events: none; opacity: 0; z-index: 5; --ev: 0; }
+.cam-focus > i { position: absolute; inset: 0; border: 1.5px solid #ffd60a; box-shadow: 0 0 6px rgba(0,0,0,.4); }
+.cam-focus.on { opacity: 1; animation: camfocus .32s cubic-bezier(.2,1.3,.4,1); } @keyframes camfocus { from { transform: scale(1.5); opacity: 0; } }
+.cam-ev { position: absolute; left: calc(100% + 8px); top: 50%; margin-top: calc(-9px - var(--ev) * 36px); color: #ffd60a; } .cam-ev::before { content: ""; position: absolute; left: 50%; top: -34px; bottom: -34px; width: 1px; background: rgba(255,214,10,.6); margin-left: -.5px; z-index: -1; }
+.cam-count { position: absolute; inset: 0; display: grid; place-items: center; font-size: 170px; font-weight: 200; opacity: 0; pointer-events: none; text-shadow: 0 4px 30px rgba(0,0,0,.5); z-index: 7; } .cam-count.on { opacity: 1; animation: camcount 1s ease-out infinite; } @keyframes camcount { from { transform: scale(1.35); opacity: .3; } 30% { opacity: 1; } to { transform: scale(.9); opacity: .9; } }
+.cam-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 8; } .cam-flash.go { animation: camflash .38s ease-out; } @keyframes camflash { 0% { opacity: .95; } 100% { opacity: 0; } }
+
+.cam-side { flex: none; width: 150px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 22px; padding: 108px 10px 26px 10px; background: #000; }
+.cam-modes { display: flex; flex-direction: column; align-items: center; gap: 4px; } .cam-m { font-size: 11.5px; font-weight: 700; letter-spacing: .04em; padding: 6px 4px; color: rgba(255,255,255,.72); transition: color .2s, transform .2s; white-space: nowrap; } .cam-m.on { color: #ffd60a; transform: scale(1.06); }
+.cam-shrow { display: flex; flex-direction: column-reverse; align-items: center; gap: 22px; }
+.cam-shutter { width: 78px; height: 78px; border-radius: 50%; border: 4px solid #fff; padding: 4px; display: block; transition: transform .12s; flex: none; }
+.cam-shutter:active { transform: scale(.94); } .cam-shutter i { display: block; width: 100%; height: 100%; border-radius: 50%; background: #fff; transition: background .2s, transform .2s, border-radius .2s; } .cam-shutter:active i { transform: scale(.9); }
+.cam-shutter.video i { background: #ff3b30; } .cam-shutter.rec i { border-radius: 10px; transform: scale(.52); } .cam-shutter.busy i { background: #cfcfd4; transform: scale(.86); }
+.cam-thumb { width: 54px; height: 54px; border-radius: 12px; background: #2a2a2e center / cover no-repeat; box-shadow: 0 0 0 1.5px rgba(255,255,255,.35); flex: none; transition: transform .15s; } .cam-thumb:active { transform: scale(.92); }
+.cam-thumb.pulse { animation: camthumb .5s cubic-bezier(.2,1.5,.4,1); } @keyframes camthumb { 0% { transform: scale(.4) rotate(-8deg); } 100% { transform: none; } }
+.cam-flip { width: 48px; height: 48px; border-radius: 50%; background: rgba(120,120,128,.3); display: grid; place-items: center; transition: transform .3s, background .2s; flex: none; } .cam-flip.on { background: rgba(255,214,10,.9); color: #000; } .cam-flip:active { transform: rotate(180deg) scale(.9); }
+.i-rec { flex-direction: column; gap: 6px; } .recdot { width: 12px; height: 12px; border-radius: 50%; background: #ff3b30; animation: camblink 1s steps(2) infinite; display: inline-block; } .i-rec .rt { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.i-exp .recdot { margin-right: 6px; }
+
+/* compact: viewfinder on top, controls underneath in a row */
+@container win (max-width: 699px) {
+  .cam { flex-direction: column; }
+  .cam-vf { --safe-r: var(--safe-r-win, 66px); }
+  .cam-top { padding-right: 66px; justify-content: flex-start; }
+  .cam-side { width: 100%; flex-direction: column-reverse; justify-content: center; gap: 4px; padding: 6px 16px calc(var(--safe-b, 22px) + 6px); }
+  .cam-modes { flex-direction: row; gap: 10px; }
+  .cam-shrow { flex-direction: row; justify-content: space-between; width: 100%; max-width: 330px; }
+  .cam-badge { top: 60px; }
+}
+
+/* ---- Duo Preview: what the subject sees on the outer display ---- */
+.cam-prev { position: absolute; inset: 0; background: #000; overflow: hidden; }
+.cp-view { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cp-kid { position: absolute; left: 50%; bottom: 8%; width: 60%; transform: translateX(-50%); pointer-events: none; }
+.cp-count { position: absolute; inset: 0; display: grid; place-items: center; font-size: 230px; font-weight: 200; opacity: 0; text-shadow: 0 4px 40px rgba(0,0,0,.5); } .cp-count.on { opacity: 1; animation: camcount 1s ease-out infinite; }
+.cp-tag { position: absolute; left: 0; right: 0; top: 16%; text-align: center; font-size: 22px; font-weight: 700; text-shadow: 0 2px 16px rgba(0,0,0,.6); }
+.cp-badge { position: absolute; left: 16px; bottom: 18px; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 14px; background: rgba(0,0,0,.5); backdrop-filter: blur(12px); font-size: 12px; font-weight: 600; }
